@@ -1,8 +1,10 @@
 package chordbuddy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -275,6 +277,144 @@ public class ChordTest {
 
     for (String symbol : symbolsInvalid) {
       assertTrue(String.format("The following chord symbol should be invalid: '%s'", symbol), !Chord.isValidSymbol(symbol));
+    }
+  }
+
+  @Test
+  public void testGetSymbolTonic_null() {
+    String expected = null;
+    String actual = Chord.getSymbolTonic(null);
+
+    assertEquals("A null symbol should return a null tonic", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolTonic_empty() {
+    String expected = null;
+    String actual = Chord.getSymbolTonic("");
+
+    assertEquals("An empty symbol should return a null tonic", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolTonic_invalid() {
+    String expected = null;
+    String actual = Chord.getSymbolTonic("badchord");
+
+    assertEquals("An invalid symbol should return a null tonic", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolTonic() {
+    Map<String, String> symbols = new HashMap<String, String>();
+    symbols.put("Amaj", "A");
+    symbols.put("B bmin", "Bb");
+    symbols.put("C", "C");
+    symbols.put("D###", "D###");
+    symbols.put("E b b Major7 #11", "Ebb");
+    symbols.put("fmin11", "f");
+    symbols.put("G-6", "G");
+
+    for (String symbol : symbols.keySet()) {
+      String tonic = Chord.getSymbolTonic(symbol);
+
+      String expected = symbols.get(symbol);
+      String actual = tonic;
+
+      assertEquals(String.format("A valid symbol should return the chord's tonic: '%s'", symbol), expected, actual);
+    }
+  }
+
+  @Test
+  public void testGetSymbolQuality_null() {
+    String expected = null;
+    String actual = Chord.getSymbolQuality(null);
+
+    assertEquals("A null symbol should return a null quality", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolQuality_empty() {
+    String expected = null;
+    String actual = Chord.getSymbolQuality("");
+
+    assertEquals("An empty symbol should return a null quality", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolQuality_invalid() {
+    String expected = null;
+    String actual = Chord.getSymbolQuality("badchord");
+
+    assertEquals("An invalid symbol should return a null quality", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolQuality() {
+    Map<String, String> symbols = new HashMap<String, String>();
+    symbols.put("Amaj", "maj");
+    symbols.put("Bbmin7", "min");
+    symbols.put("Cdim7b5", "dim");
+    symbols.put("Daugb9#11", "aug");
+    symbols.put("Ebb Ma j or7 #11", "Major");
+    symbols.put("fmin11", "min");
+    symbols.put("G-6", "-");
+    symbols.put("a+7#11", "+");
+    symbols.put("B diminished", "diminished");
+    symbols.put("C", null);
+
+    for (String symbol : symbols.keySet()) {
+      String quality = Chord.getSymbolQuality(symbol);
+
+      String expected = symbols.get(symbol);
+      String actual = quality;
+
+      assertEquals(String.format("A valid symbol should return the chord's quality: '%s'", symbol), expected, actual);
+    }
+  }
+
+  @Test
+  public void testGetSymbolModifiers_null() {
+    String expected = null;
+    String actual = Chord.getSymbolModifiers(null);
+
+    assertEquals("A null symbol should return null modifiers", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolModifiers_empty() {
+    String expected = null;
+    String actual = Chord.getSymbolModifiers("");
+
+    assertEquals("An empty symbol should return null modifiers", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolModifiers_invalid() {
+    String expected = null;
+    String actual = Chord.getSymbolModifiers("badchord");
+
+    assertEquals("An invalid symbol should return null modifiers", expected, actual);
+  }
+
+  @Test
+  public void testGetSymbolModifiers() {
+    Map<String, String> symbols = new HashMap<String, String>();
+    symbols.put("Amaj", null);
+    symbols.put("Bbmin7", "7");
+    symbols.put("Cdim7b5", "7b5");
+    symbols.put("Daug b9 #11", "b9#11");
+    symbols.put("Ebb Major7 #11", "7#11");
+    symbols.put("fmin11", "11");
+    symbols.put("G-6", "6");
+
+    for (String symbol : symbols.keySet()) {
+      String modifiers = Chord.getSymbolModifiers(symbol);
+
+      String expected = symbols.get(symbol);
+      String actual = modifiers;
+
+      assertEquals(String.format("A valid symbol should return the chord's modifiers: '%s'", symbol), expected, actual);
     }
   }
 }
