@@ -9,18 +9,6 @@ import java.util.regex.Pattern;
  */
 public class Chord {
 
-  private static final String tonicRegex;
-  private static final String accidentalRegex;
-  private static final String qualityRegex;
-  private static final String modifierRegex;
-
-  static {
-    tonicRegex = "(?i)[A-G]";
-    accidentalRegex = "(?-i)(?:[b]*|[#]*)";
-    qualityRegex = "(?i)(?:maj|major|min|minor|\\-|dim|diminished|aug|augmented|\\+)?";
-    modifierRegex = "(?-i)(?:6|7|9|11|13)*(?:(?:[b]+|[#]+)(?:5|7|9|11|13))*";
-  }
-
   public static boolean isValidSymbol(String symbol) {
     if (symbol == null) {
       return false;
@@ -30,10 +18,10 @@ public class Chord {
 
     Pattern validationPattern = Pattern.compile(
             "^" +
-            tonicRegex +
-            accidentalRegex +
-            qualityRegex +
-            modifierRegex +
+            MusicTheory.tonicRegex +
+            MusicTheory.accidentalRegex +
+            MusicTheory.qualityRegex +
+            MusicTheory.modifierRegex +
             "$");
 
     Matcher m = validationPattern.matcher(symbol);
@@ -53,11 +41,11 @@ public class Chord {
 
     Pattern tonicPattern = Pattern.compile(
             "^(" +
-            tonicRegex +
-            accidentalRegex +
+            MusicTheory.tonicRegex +
+            MusicTheory.accidentalRegex +
             ")" +
-            qualityRegex +
-            modifierRegex +
+            MusicTheory.qualityRegex +
+            MusicTheory.modifierRegex +
             "$");
 
     Matcher m = tonicPattern.matcher(symbol);
@@ -65,7 +53,8 @@ public class Chord {
       return null;
     }
 
-    return m.group(1);
+    String tonic = m.group(1);
+    return tonic;
   }
 
   public static String getSymbolQuality(String symbol) {
@@ -77,12 +66,12 @@ public class Chord {
 
     Pattern qualityPattern = Pattern.compile(
             "^" +
-            tonicRegex +
-            accidentalRegex +
+            MusicTheory.tonicRegex +
+            MusicTheory.accidentalRegex +
             "(" +
-            qualityRegex +
+            MusicTheory.qualityRegex +
             ")" +
-            modifierRegex +
+            MusicTheory.modifierRegex +
             "$");
 
     Matcher m = qualityPattern.matcher(symbol);
@@ -107,11 +96,11 @@ public class Chord {
 
     Pattern modifiersPattern = Pattern.compile(
             "^" +
-            tonicRegex +
-            accidentalRegex +
-            qualityRegex +
+            MusicTheory.tonicRegex +
+            MusicTheory.accidentalRegex +
+            MusicTheory.qualityRegex +
             "(" +
-            modifierRegex +
+            MusicTheory.modifierRegex +
             ")$");
 
     Matcher m = modifiersPattern.matcher(symbol);
