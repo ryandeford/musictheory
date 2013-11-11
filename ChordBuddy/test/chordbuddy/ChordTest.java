@@ -282,44 +282,44 @@ public class ChordTest {
 
   @Test
   public void testGetSymbolTonic_null() {
-    String expected = null;
-    String actual = Chord.getSymbolTonic(null);
+    Note expected = null;
+    Note actual = Chord.getSymbolTonic(null);
 
     assertEquals("A null symbol should return a null tonic", expected, actual);
   }
 
   @Test
   public void testGetSymbolTonic_empty() {
-    String expected = null;
-    String actual = Chord.getSymbolTonic("");
+    Note expected = null;
+    Note actual = Chord.getSymbolTonic("");
 
     assertEquals("An empty symbol should return a null tonic", expected, actual);
   }
 
   @Test
   public void testGetSymbolTonic_invalid() {
-    String expected = null;
-    String actual = Chord.getSymbolTonic("badchord");
+    Note expected = null;
+    Note actual = Chord.getSymbolTonic("badchord");
 
     assertEquals("An invalid symbol should return a null tonic", expected, actual);
   }
 
   @Test
   public void testGetSymbolTonic() {
-    Map<String, String> symbols = new HashMap<String, String>();
-    symbols.put("Amaj", "A");
-    symbols.put("B bmin", "Bb");
-    symbols.put("C", "C");
-    symbols.put("D###", "D###");
-    symbols.put("E b b Major7 #11", "Ebb");
-    symbols.put("fmin11", "f");
-    symbols.put("G-6", "G");
+    Map<String, Note> symbols = new HashMap<String, Note>();
+    symbols.put("Amaj", Note.create("A"));
+    symbols.put("B bmin", Note.create("Bb"));
+    symbols.put("C", Note.create("C"));
+    symbols.put("D###", Note.create("D###"));
+    symbols.put("E b b Major7 #11", Note.create("Ebb"));
+    symbols.put("fmin11", Note.create("f"));
+    symbols.put("G-6", Note.create("G"));
 
     for (String symbol : symbols.keySet()) {
-      String tonic = Chord.getSymbolTonic(symbol);
+      Note tonic = Chord.getSymbolTonic(symbol);
 
-      String expected = symbols.get(symbol);
-      String actual = tonic;
+      Note expected = symbols.get(symbol);
+      Note actual = tonic;
 
       assertEquals(String.format("A valid symbol should return the chord's tonic: '%s'", symbol), expected, actual);
     }
@@ -327,47 +327,48 @@ public class ChordTest {
 
   @Test
   public void testGetSymbolQuality_null() {
-    String expected = null;
-    String actual = Chord.getSymbolQuality(null);
+    MusicTheory.ChordQuality expected = null;
+    MusicTheory.ChordQuality actual = Chord.getSymbolQuality(null);
 
     assertEquals("A null symbol should return a null quality", expected, actual);
   }
 
   @Test
   public void testGetSymbolQuality_empty() {
-    String expected = null;
-    String actual = Chord.getSymbolQuality("");
+    MusicTheory.ChordQuality expected = null;
+    MusicTheory.ChordQuality actual = Chord.getSymbolQuality("");
 
     assertEquals("An empty symbol should return a null quality", expected, actual);
   }
 
   @Test
   public void testGetSymbolQuality_invalid() {
-    String expected = null;
-    String actual = Chord.getSymbolQuality("badchord");
+    MusicTheory.ChordQuality expected = null;
+    MusicTheory.ChordQuality actual = Chord.getSymbolQuality("badchord");
 
     assertEquals("An invalid symbol should return a null quality", expected, actual);
   }
 
   @Test
   public void testGetSymbolQuality() {
-    Map<String, String> symbols = new HashMap<String, String>();
-    symbols.put("Amaj", "maj");
-    symbols.put("Bbmin7", "min");
-    symbols.put("Cdim7b5", "dim");
-    symbols.put("Daugb9#11", "aug");
-    symbols.put("Ebb Ma j or7 #11", "Major");
-    symbols.put("fmin11", "min");
-    symbols.put("G-6", "-");
-    symbols.put("a+7#11", "+");
-    symbols.put("B diminished", "diminished");
-    symbols.put("C", null);
+    Map<String, MusicTheory.ChordQuality> symbols = new HashMap<String, MusicTheory.ChordQuality>();
+    symbols.put("Amaj", MusicTheory.ChordQuality.Maj);
+    symbols.put("Bbmin7", MusicTheory.ChordQuality.Min);
+    symbols.put("Cdim7b5", MusicTheory.ChordQuality.Dim);
+    symbols.put("Daugb9#11", MusicTheory.ChordQuality.Aug);
+    symbols.put("Ebb Ma j or7 #11", MusicTheory.ChordQuality.Maj);
+    symbols.put("fmin11", MusicTheory.ChordQuality.Min);
+    symbols.put("G-6", MusicTheory.ChordQuality.Min);
+    symbols.put("a+7#11", MusicTheory.ChordQuality.Aug);
+    symbols.put("B diminished", MusicTheory.ChordQuality.Dim);
+    symbols.put("C", MusicTheory.ChordQuality.Maj);
+    symbols.put("c", MusicTheory.ChordQuality.Min);
 
     for (String symbol : symbols.keySet()) {
-      String quality = Chord.getSymbolQuality(symbol);
+      MusicTheory.ChordQuality quality = Chord.getSymbolQuality(symbol);
 
-      String expected = symbols.get(symbol);
-      String actual = quality;
+      MusicTheory.ChordQuality expected = symbols.get(symbol);
+      MusicTheory.ChordQuality actual = quality;
 
       assertEquals(String.format("A valid symbol should return the chord's quality: '%s'", symbol), expected, actual);
     }
@@ -375,46 +376,244 @@ public class ChordTest {
 
   @Test
   public void testGetSymbolModifiers_null() {
-    String expected = null;
-    String actual = Chord.getSymbolModifiers(null);
+    List<Modifier> expected = null;
+    List<Modifier> actual = Chord.getSymbolModifiers(null);
 
     assertEquals("A null symbol should return null modifiers", expected, actual);
   }
 
   @Test
   public void testGetSymbolModifiers_empty() {
-    String expected = null;
-    String actual = Chord.getSymbolModifiers("");
+    List<Modifier> expected = null;
+    List<Modifier> actual = Chord.getSymbolModifiers("");
 
     assertEquals("An empty symbol should return null modifiers", expected, actual);
   }
 
   @Test
   public void testGetSymbolModifiers_invalid() {
-    String expected = null;
-    String actual = Chord.getSymbolModifiers("badchord");
+    List<Modifier> expected = null;
+    List<Modifier> actual = Chord.getSymbolModifiers("badchord");
 
     assertEquals("An invalid symbol should return null modifiers", expected, actual);
   }
 
   @Test
   public void testGetSymbolModifiers() {
-    Map<String, String> symbols = new HashMap<String, String>();
-    symbols.put("Amaj", null);
-    symbols.put("Bbmin7", "7");
-    symbols.put("Cdim7b5", "7b5");
-    symbols.put("Daug b9 #11", "b9#11");
-    symbols.put("Ebb Major7 #11", "7#11");
-    symbols.put("fmin11", "11");
-    symbols.put("G-6", "6");
+    Map<String, List<Modifier>> symbols = new HashMap<String, List<Modifier>>();
+    List<Modifier> output;
+
+    output = new ArrayList<Modifier>();
+    symbols.put("Amaj", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(7, 0));
+    symbols.put("Bbmin7", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(7, 0));
+    output.add(new Modifier(5, -1));
+    symbols.put("Cdim7b5", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(9, -1));
+    output.add(new Modifier(11, 1));
+    symbols.put("Daug b9 #11", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(7, 0));
+    output.add(new Modifier(11, 1));
+    symbols.put("Ebb Major7 #11", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(11, 0));
+    symbols.put("fmin11", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(6, 0));
+    symbols.put("G-6", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(6, 0));
+    output.add(new Modifier(9, 2));
+    output.add(new Modifier(13, -2));
+    symbols.put("Amaj6##9bb13", output);
 
     for (String symbol : symbols.keySet()) {
-      String modifiers = Chord.getSymbolModifiers(symbol);
+      List<Modifier> modifiers = Chord.getSymbolModifiers(symbol);
 
-      String expected = symbols.get(symbol);
-      String actual = modifiers;
+      List<Modifier> expected = symbols.get(symbol);
+      List<Modifier> actual = modifiers;
 
       assertEquals(String.format("A valid symbol should return the chord's modifiers: '%s'", symbol), expected, actual);
+    }
+  }
+
+  @Test
+  public void testGetNotes_triads() {
+    Map<String, List<Note>> symbols = new HashMap<String, List<Note>>();
+    List<Note> output;
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("C"));
+    output.add(Note.create("E"));
+    output.add(Note.create("G"));
+    symbols.put("CMajor", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("Bb"));
+    output.add(Note.create("D"));
+    output.add(Note.create("F"));
+    symbols.put("Bb", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("A#"));
+    output.add(Note.create("C##"));
+    output.add(Note.create("E#"));
+    symbols.put("A#", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("D"));
+    output.add(Note.create("F"));
+    output.add(Note.create("A"));
+    symbols.put("Dmin", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("E#"));
+    output.add(Note.create("G#"));
+    output.add(Note.create("B#"));
+    symbols.put("e#", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("Cb"));
+    output.add(Note.create("Ebb"));
+    output.add(Note.create("Gb"));
+    symbols.put("Cb-", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("A"));
+    output.add(Note.create("C"));
+    output.add(Note.create("Eb"));
+    symbols.put("Adiminished", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("G#"));
+    output.add(Note.create("B"));
+    output.add(Note.create("D"));
+    symbols.put("g# dim", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("Fbbb"));
+    output.add(Note.create("Abbbb"));
+    output.add(Note.create("Cbbbb"));
+    symbols.put("FbbbDIM", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("B"));
+    output.add(Note.create("D#"));
+    output.add(Note.create("F##"));
+    symbols.put("B augmented", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("Eb"));
+    output.add(Note.create("G"));
+    output.add(Note.create("B"));
+    symbols.put("Eb+", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("F#"));
+    output.add(Note.create("A#"));
+    output.add(Note.create("C##"));
+    symbols.put("F# AUG", output);
+
+    for (String symbol : symbols.keySet()) {
+      List<Note> notes = Chord.create(symbol).getNotes();
+
+      List<Note> expected = symbols.get(symbol);
+      List<Note> actual = notes;
+
+      assertEquals(String.format("A valid triad-only symbol should return the correct chord tones: '%s'", symbol), expected, actual);
+    }
+  }
+
+  @Test
+  public void testGetNotes() {
+    Map<String, List<Note>> symbols = new HashMap<String, List<Note>>();
+    List<Note> output;
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("A"));
+    output.add(Note.create("C#"));
+    output.add(Note.create("E"));
+    symbols.put("Amaj", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("Bb"));
+    output.add(Note.create("Db"));
+    output.add(Note.create("F"));
+    output.add(Note.create("Ab"));
+    symbols.put("Bbmin7", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("C"));
+    output.add(Note.create("Eb"));
+    output.add(Note.create("Gb"));
+    output.add(Note.create("Bb"));
+    symbols.put("C-7b5", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("D"));
+    output.add(Note.create("F#"));
+    output.add(Note.create("A#"));
+    output.add(Note.create("Eb"));
+    output.add(Note.create("G#"));
+    symbols.put("Daug b9 #11", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("Ebb"));
+    output.add(Note.create("Gb"));
+    output.add(Note.create("Bbb"));
+    output.add(Note.create("Db"));
+    output.add(Note.create("Ab"));
+    symbols.put("Ebb Major7 #11", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("F"));
+    output.add(Note.create("Ab"));
+    output.add(Note.create("C"));
+    output.add(Note.create("Bb"));
+    symbols.put("fmin11", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("G"));
+    output.add(Note.create("Bb"));
+    output.add(Note.create("D"));
+    output.add(Note.create("E"));
+    symbols.put("G-6", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("A"));
+    output.add(Note.create("C#"));
+    output.add(Note.create("E"));
+    output.add(Note.create("F#"));
+    output.add(Note.create("B##"));
+    output.add(Note.create("Fb"));
+    symbols.put("Amaj6##9bb13", output);
+
+    output = new ArrayList<Note>();
+    output.add(Note.create("C"));
+    output.add(Note.create("E"));
+    output.add(Note.create("Gb"));
+    output.add(Note.create("Bb"));
+    symbols.put("Cmajb7b5", output);
+
+    for (String symbol : symbols.keySet()) {
+      List<Note> notes = Chord.create(symbol).getNotes();
+
+      List<Note> expected = symbols.get(symbol);
+      List<Note> actual = notes;
+
+      assertEquals(String.format("A valid symbol should return the correct chord tones: '%s'", symbol), expected, actual);
     }
   }
 }

@@ -44,6 +44,22 @@ public class NoteTest {
   }
 
   @Test
+  public void testCopy() {
+    String noteName = "C#";
+    Note original = Note.create(noteName);
+    Note originalBackup = Note.create(noteName);
+    assertEquals("The note backup must be equal to the original", original, originalBackup);
+
+    Note copy = Note.copy(original);
+    assertEquals("A note copy must be equal to the original", original, copy);
+
+    copy.flatify(1);
+
+    assertFalse("The note copy must now be different than the original", original.equals(copy));
+    assertTrue("The original note did not change when the copy was modified", original.equals(originalBackup));
+  }
+
+  @Test
   public void testIsValidSymbol_null() {
     assertTrue("A null string is not a valid note symbol", !Note.isValidSymbol(null));
   }

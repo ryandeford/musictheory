@@ -23,15 +23,15 @@ public class Main {
 
       try {
         while ((symbol = stdin.readLine()) != null && symbol.length() != 0) {
-          if (Chord.isValidSymbol(symbol)) {
-            System.out.println("\tTonic: " + Chord.getSymbolTonic(symbol));
-            System.out.println("\tQuality: " + Chord.getSymbolQuality(symbol));
-            System.out.println("\tModifiers: " + Chord.getSymbolModifiers(symbol));
+          Chord chord = Chord.create(symbol);
+
+          if (chord != null) {
+            System.out.println(" => " + chord.getNotes());
           } else {
             System.err.println(String.format("Invalid chord symbol detected!: '%s'", symbol));
           }
 
-          System.out.print("More? (hit enter to exit): ");
+          System.out.print("More?...or hit enter to exit: ");
         }
 
         stdin.close();

@@ -15,6 +15,7 @@ public class MusicTheory {
 
   public static final Character notationFlatChar;
   public static final Character notationSharpChar;
+  public static final Map<String, ChordQuality> notationChordQualities;
   public static final String tonicRegex;
   public static final String accidentalRegex;
   public static final String qualityRegex;
@@ -30,6 +31,14 @@ public class MusicTheory {
     F,
     G,
   }
+
+  public static enum ChordQuality {
+
+    Maj,
+    Min,
+    Dim,
+    Aug,
+  }
   public static final List<NoteName> orderOfFlats;
 
   public static enum KeyType {
@@ -43,6 +52,18 @@ public class MusicTheory {
   static {
     notationFlatChar = new Character('b');
     notationSharpChar = new Character('#');
+
+    notationChordQualities = new HashMap<String, ChordQuality>();
+    notationChordQualities.put("maj", ChordQuality.Maj);
+    notationChordQualities.put("major", ChordQuality.Maj);
+    notationChordQualities.put("min", ChordQuality.Min);
+    notationChordQualities.put("minor", ChordQuality.Min);
+    notationChordQualities.put("-", ChordQuality.Min);
+    notationChordQualities.put("dim", ChordQuality.Dim);
+    notationChordQualities.put("diminished", ChordQuality.Dim);
+    notationChordQualities.put("aug", ChordQuality.Aug);
+    notationChordQualities.put("augmented", ChordQuality.Aug);
+    notationChordQualities.put("+", ChordQuality.Aug);
 
     tonicRegex = "(?i)[A-G]";
     accidentalRegex = "(?-i)(?:[b]*|[#]*)";

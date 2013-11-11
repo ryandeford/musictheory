@@ -25,6 +25,16 @@ public class Note {
     return new Note(Note.getSymbolLetter(symbol), Note.getSymbolQuality(symbol));
   }
 
+  public static Note copy(Note note) {
+    if (note == null) {
+      return null;
+    }
+
+    Note copy = new Note(note.letter, note.quality);
+
+    return copy;
+  }
+
   public static boolean isValidSymbol(String symbol) {
     if (symbol == null) {
       return false;
