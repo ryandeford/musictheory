@@ -38,6 +38,9 @@ public class MusicTheory {
     Min,
     Dim,
     Aug,
+    Dom,
+    Sus2,
+    Sus4,
   }
   public static final List<NoteName> orderOfFlats;
 
@@ -45,7 +48,7 @@ public class MusicTheory {
 
     Flat,
     Sharp,
-    Natural
+    Natural,
   }
   public static final Map<NoteName, Key> foundationKeys;
 
@@ -64,11 +67,16 @@ public class MusicTheory {
     notationChordQualities.put("aug", ChordQuality.Aug);
     notationChordQualities.put("augmented", ChordQuality.Aug);
     notationChordQualities.put("+", ChordQuality.Aug);
+    notationChordQualities.put("dom", ChordQuality.Dom);
+    notationChordQualities.put("dominant", ChordQuality.Dom);
+    notationChordQualities.put("sus", ChordQuality.Sus4);
+    notationChordQualities.put("sus4", ChordQuality.Sus4);
+    notationChordQualities.put("sus2", ChordQuality.Sus2);
 
-    tonicRegex = "(?i)[A-G]";
-    accidentalRegex = "(?-i)(?:[b]*|[#]*)";
-    qualityRegex = "(?i)(?:maj|major|min|minor|\\-|dim|diminished|aug|augmented|\\+)?";
-    modifierRegex = "(?-i)(?:6|7|9|11|13)*(?:(?:[b]+|[#]+)(?:5|7|9|11|13))*";
+    tonicRegex = String.format("(?i)[%s-%s]", NoteName.values()[0], NoteName.values()[NoteName.values().length - 1]);
+    accidentalRegex = String.format("(?-i)(?:[%c]*|[%c]*)", notationFlatChar, notationSharpChar);
+    qualityRegex = "(?i)(?:maj|major|min|minor|\\-|dim|diminished|aug|augmented|\\+|dom|dominant|sus|sus2|sus4)?";
+    modifierRegex = String.format("(?-i)(?:6|7|9|11|13)?(?:(?:[%c]+|[%c]+)(?:5|7|9|11|13))*", notationFlatChar, notationSharpChar);
 
     orderOfFlats = new ArrayList<NoteName>();
     orderOfFlats.add(NoteName.B);

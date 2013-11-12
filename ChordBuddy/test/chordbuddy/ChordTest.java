@@ -6,10 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -26,9 +22,6 @@ public class ChordTest {
   private static final Character flatChar;
   private static final Character sharpChar;
 
-  public ChordTest() {
-  }
-
   static {
     tonics = new ArrayList<String>();
     tonics.add("A");
@@ -40,16 +33,7 @@ public class ChordTest {
     tonics.add("G");
 
     qualities = new HashSet<String>();
-    qualities.add("maj");
-    qualities.add("major");
-    qualities.add("min");
-    qualities.add("minor");
-    qualities.add("-");
-    qualities.add("dim");
-    qualities.add("diminished");
-    qualities.add("aug");
-    qualities.add("augmented");
-    qualities.add("+");
+    qualities.addAll(MusicTheory.notationChordQualities.keySet());
 
     premodifiers = new ArrayList<Integer>();
     premodifiers.add(6);
@@ -67,22 +51,6 @@ public class ChordTest {
 
     flatChar = 'b';
     sharpChar = '#';
-  }
-
-  @BeforeClass
-  public static void setUpClass() throws Exception {
-  }
-
-  @AfterClass
-  public static void tearDownClass() throws Exception {
-  }
-
-  @Before
-  public void setUp() {
-  }
-
-  @After
-  public void tearDown() {
   }
 
   @Test
@@ -314,6 +282,7 @@ public class ChordTest {
     symbols.put("E b b Major7 #11", Note.create("Ebb"));
     symbols.put("fmin11", Note.create("f"));
     symbols.put("G-6", Note.create("G"));
+    symbols.put("C#dom7", Note.create("C#"));
 
     for (String symbol : symbols.keySet()) {
       Note tonic = Chord.getSymbolTonic(symbol);
@@ -615,5 +584,63 @@ public class ChordTest {
 
       assertEquals(String.format("A valid symbol should return the correct chord tones: '%s'", symbol), expected, actual);
     }
+  }
+
+  @Test
+  public void test_ChordDominant7() {
+    List<Note> expected = new ArrayList<Note>();
+    expected.add(Note.create("C#"));
+    expected.add(Note.create("E#"));
+    expected.add(Note.create("G#"));
+    expected.add(Note.create("B"));
+
+    Set<String> notations = new HashSet<String>();
+    notations.add("dom");
+    notations.add("dom7");
+    notations.add("dominant");
+    notations.add("dominant7");
+
+    for (String notation : notations) {
+      List<Note> actual = Chord.create(String.format("C#%s", notation)).getNotes();
+
+      String msg = String.format("A %s chord should return the correct chord tones", notation);
+      assertEquals(msg, expected, actual);
+    }
+  }
+
+  @Test
+  public void test_ChordSuspended() {
+    List<Note> actual = Chord.create("C#sus").getNotes();
+    List<Note> expected = new ArrayList<Note>();
+    expected.add(Note.create("C#"));
+    expected.add(Note.create("F#"));
+    expected.add(Note.create("G#"));
+
+    String msg = "A sus chord should be implied as a sus4 and return the correct chord tones";
+    assertEquals(msg, expected, actual);
+  }
+
+  @Test
+  public void test_ChordSuspended4() {
+    List<Note> actual = Chord.create("C#sus4").getNotes();
+    List<Note> expected = new ArrayList<Note>();
+    expected.add(Note.create("C#"));
+    expected.add(Note.create("F#"));
+    expected.add(Note.create("G#"));
+
+    String msg = "A sus4 chord should return the correct chord tones";
+    assertEquals(msg, expected, actual);
+  }
+
+  @Test
+  public void test_ChordSuspended2() {
+    List<Note> actual = Chord.create("C#sus2").getNotes();
+    List<Note> expected = new ArrayList<Note>();
+    expected.add(Note.create("C#"));
+    expected.add(Note.create("D#"));
+    expected.add(Note.create("G#"));
+
+    String msg = "A sus2 chord should return the correct chord tones";
+    assertEquals(msg, expected, actual);
   }
 }

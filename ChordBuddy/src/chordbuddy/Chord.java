@@ -178,24 +178,39 @@ public class Chord {
       fifth.flatify(1);
     } else if (this.chordQuality == MusicTheory.ChordQuality.Aug) {
       fifth.sharpify(1);
+    } else if (this.chordQuality == MusicTheory.ChordQuality.Dom) {
+      Note seventh = Note.copy(scale.get(6));
+      seventh.flatify(1);
+      chordTones.put(7, seventh);
+    } else if (this.chordQuality == MusicTheory.ChordQuality.Sus2) {
+      chordTones.put(2, Note.copy(scale.get(1)));
+    } else if (this.chordQuality == MusicTheory.ChordQuality.Sus4) {
+      chordTones.put(4, Note.copy(scale.get(3)));
     }
 
     chordTones.put(1, root);
-    chordTones.put(3, third);
+    if (this.chordQuality != MusicTheory.ChordQuality.Sus2 && this.chordQuality != MusicTheory.ChordQuality.Sus4) {
+      chordTones.put(3, third);
+    }
     chordTones.put(5, fifth);
 
     for (Modifier modifier : this.modifiers) {
       Note target = Note.copy(scale.get((modifier.TargetIndex - 1) % scale.size()));
 
-      if (modifier.TargetIndex == 5) {
+      if (modifier.Quality == 0) {
+        // this is just an addition w/o modification
+        if (modifier.TargetIndex == 7) {
+          if (this.chordQuality == MusicTheory.ChordQuality.Min) {
+            target.flatify(1);
+          } else if (this.chordQuality == MusicTheory.ChordQuality.Dim) {
+            target.flatify(2);
+          } else if (this.chordQuality == MusicTheory.ChordQuality.Dom) {
+            continue;
+          }
+        }
+      } else if (modifier.TargetIndex == 5) {
         fifth = chordTones.get(5);
         fifth.setQuality(fifth.getQuality() + modifier.Quality);
-      } else if (modifier.TargetIndex == 7 && modifier.Quality == 0) {
-        if (this.chordQuality == MusicTheory.ChordQuality.Min) {
-          target.flatify(1);
-        } else if (this.chordQuality == MusicTheory.ChordQuality.Dim) {
-          target.flatify(2);
-        }
       }
 
       target.setQuality(target.getQuality() + modifier.Quality);
