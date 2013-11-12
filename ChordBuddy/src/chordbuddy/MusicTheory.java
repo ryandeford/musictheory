@@ -35,6 +35,7 @@ public class MusicTheory {
   public static enum ChordQuality {
 
     Maj,
+    MajInferred,
     Min,
     Dim,
     Aug,
@@ -75,7 +76,7 @@ public class MusicTheory {
 
     tonicRegex = String.format("(?i)[%s-%s]", NoteName.values()[0], NoteName.values()[NoteName.values().length - 1]);
     accidentalRegex = String.format("(?-i)(?:[%c]*|[%c]*)", notationFlatChar, notationSharpChar);
-    qualityRegex = "(?i)(?:maj|major|min|minor|\\-|dim|diminished|aug|augmented|\\+|dom|dominant|sus|sus2|sus4)?";
+    qualityRegex = "(?i)(?:" + getChordQualityNotationRegex() + ")?";
     modifierRegex = String.format("(?-i)(?:6|7|9|11|13)?(?:(?:[%c]+|[%c]+)(?:5|7|9|11|13))*", notationFlatChar, notationSharpChar);
 
     orderOfFlats = new ArrayList<NoteName>();
@@ -95,6 +96,19 @@ public class MusicTheory {
     foundationKeys.put(NoteName.E, new Key(KeyType.Sharp, 4));
     foundationKeys.put(NoteName.F, new Key(KeyType.Flat, 1));
     foundationKeys.put(NoteName.G, new Key(KeyType.Sharp, 1));
+  }
+
+  private static String getChordQualityNotationRegex() {
+    StringBuilder sb = new StringBuilder();
+    String prefix = "";
+
+    for (String notation : notationChordQualities.keySet()) {
+      sb.append(prefix);
+      sb.append("\\Q" + notation + "\\E");
+      prefix = "|";
+    }
+
+    return sb.toString();
   }
 
   public static List<Note> getMajorScale(Note tonic) {

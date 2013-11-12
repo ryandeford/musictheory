@@ -64,21 +64,25 @@ public class Chord {
 
     symbol = Utilities.removeWhitespace(symbol);
 
-    Pattern tonicPattern = Pattern.compile(
-            "^(" +
-            MusicTheory.tonicRegex +
-            MusicTheory.accidentalRegex +
-            ")" +
-            MusicTheory.qualityRegex +
-            MusicTheory.modifierRegex +
-            "$");
+    Character noteName = symbol.charAt(0);
+    String noteAccidentals = "";
+    Character noteBaseAccidental = null;
 
-    Matcher m = tonicPattern.matcher(symbol);
-    if (!m.matches()) {
-      return null;
+    for (int i = 1; i < symbol.length(); i++) {
+      Character curChar = symbol.charAt(i);
+      if (curChar.equals(MusicTheory.notationFlatChar) || curChar.equals(MusicTheory.notationSharpChar)) {
+        if (noteBaseAccidental == null) {
+          noteBaseAccidental = curChar;
+          noteAccidentals += curChar;
+        } else if (curChar.equals(noteBaseAccidental)) {
+          noteAccidentals += curChar;
+        }
+      } else {
+        break;
+      }
     }
 
-    Note tonic = Note.create(m.group(1));
+    Note tonic = Note.create(noteName + noteAccidentals);
     return tonic;
   }
 
@@ -112,7 +116,7 @@ public class Chord {
       if (Character.isLowerCase(tonicLetter)) {
         quality = MusicTheory.ChordQuality.Min;
       } else if (Character.isUpperCase(tonicLetter)) {
-        quality = MusicTheory.ChordQuality.Maj;
+        quality = MusicTheory.ChordQuality.MajInferred;
       }
     }
 
@@ -130,8 +134,9 @@ public class Chord {
             "^" +
             MusicTheory.tonicRegex +
             MusicTheory.accidentalRegex +
-            MusicTheory.qualityRegex +
             "(" +
+            MusicTheory.qualityRegex +
+            ")(" +
             MusicTheory.modifierRegex +
             ")$");
 
@@ -142,7 +147,8 @@ public class Chord {
 
     List<Modifier> modifiers = new ArrayList<Modifier>();
 
-    String modifierString = m.group(1);
+    String qualityString = m.group(1);
+    String modifierString = m.group(2);
 
     Pattern p = Pattern.compile("(" + MusicTheory.accidentalRegex + ")(\\d+)");
     m = p.matcher(modifierString);
@@ -155,6 +161,12 @@ public class Chord {
 
       if (accidentalString.indexOf(MusicTheory.notationFlatChar) >= 0) {
         quality *= -1;
+      }
+
+      if (modifiers.size() == 0 && qualityString.length() == 0) {
+        if (index == 7) {
+          quality = 0;
+        }
       }
 
       modifiers.add(new Modifier(index, quality));
@@ -198,9 +210,10 @@ public class Chord {
       Note target = Note.copy(scale.get((modifier.TargetIndex - 1) % scale.size()));
 
       if (modifier.Quality == 0) {
-        // this is just an addition w/o modification
         if (modifier.TargetIndex == 7) {
-          if (this.chordQuality == MusicTheory.ChordQuality.Min) {
+          if (this.chordQuality == MusicTheory.ChordQuality.MajInferred) {
+            target.flatify(1);
+          } else if (this.chordQuality == MusicTheory.ChordQuality.Min) {
             target.flatify(1);
           } else if (this.chordQuality == MusicTheory.ChordQuality.Dim) {
             target.flatify(2);

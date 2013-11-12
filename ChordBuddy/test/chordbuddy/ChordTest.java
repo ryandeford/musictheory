@@ -229,6 +229,9 @@ public class ChordTest {
     symbolsValid.add("E");
     symbolsValid.add("F + 7 #11 b13");
     symbolsValid.add("gmin");
+    symbolsValid.add("A7");
+    symbolsValid.add("D#9");
+    symbolsValid.add("Fbb13");
 
     for (String symbol : symbolsValid) {
       assertTrue(String.format("The following chord symbol should be valid: '%s'", symbol), Chord.isValidSymbol(symbol));
@@ -283,6 +286,13 @@ public class ChordTest {
     symbols.put("fmin11", Note.create("f"));
     symbols.put("G-6", Note.create("G"));
     symbols.put("C#dom7", Note.create("C#"));
+    symbols.put("A7", Note.create("A"));
+    symbols.put("B#9", Note.create("B#"));
+    symbols.put("Cb13", Note.create("Cb"));
+    symbols.put("D##9", Note.create("D##"));
+    symbols.put("Ebb11", Note.create("Ebb"));
+    symbols.put("Fbb#11", Note.create("Fbb"));
+    symbols.put("G##b13", Note.create("G##"));
 
     for (String symbol : symbols.keySet()) {
       Note tonic = Chord.getSymbolTonic(symbol);
@@ -330,7 +340,7 @@ public class ChordTest {
     symbols.put("G-6", MusicTheory.ChordQuality.Min);
     symbols.put("a+7#11", MusicTheory.ChordQuality.Aug);
     symbols.put("B diminished", MusicTheory.ChordQuality.Dim);
-    symbols.put("C", MusicTheory.ChordQuality.Maj);
+    symbols.put("C", MusicTheory.ChordQuality.MajInferred);
     symbols.put("c", MusicTheory.ChordQuality.Min);
 
     for (String symbol : symbols.keySet()) {
@@ -407,6 +417,14 @@ public class ChordTest {
     output.add(new Modifier(9, 2));
     output.add(new Modifier(13, -2));
     symbols.put("Amaj6##9bb13", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(7, 0));
+    symbols.put("Ab7", output);
+
+    output = new ArrayList<Modifier>();
+    output.add(new Modifier(7, 0));
+    symbols.put("A#7", output);
 
     for (String symbol : symbols.keySet()) {
       List<Modifier> modifiers = Chord.getSymbolModifiers(symbol);
@@ -599,6 +617,7 @@ public class ChordTest {
     notations.add("dom7");
     notations.add("dominant");
     notations.add("dominant7");
+    notations.add("7");
 
     for (String notation : notations) {
       List<Note> actual = Chord.create(String.format("C#%s", notation)).getNotes();
